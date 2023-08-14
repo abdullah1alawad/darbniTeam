@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,7 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'specialization_id',
-        'phone','photo',
+        'phone','role',
         'code',
     ];
 
@@ -39,6 +45,28 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        
+
     ];
+
+    public function favorites() : HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function specialization() : BelongsTo
+    {
+        return $this->belongsTo(Specialization::class);
+    }
+
+    public function complaints() : HasMany
+    {
+        return $this->hasMany(Complaint::class);
+    }
+
+    public function image() : MorphOne
+    {
+        return $this->morphOne(Imageable::class,'imageable');
+    }
+
+
 }
