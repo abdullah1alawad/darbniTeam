@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->unique();
             $table->unsignedBigInteger('user_id');
             $table->string('content');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

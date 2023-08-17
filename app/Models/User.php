@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -25,9 +28,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
+        'uuid',
         'specialization_id',
         'phone','role',
         'code',
+        'photo',
     ];
 
     /**
@@ -36,7 +41,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'code',
+        'code','created_at','updated_at','id'
     ];
 
     /**
@@ -45,17 +50,28 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-
+        'id'=>'integer',
+        'uuid'=>'string',
+        'specialization_id'=>'integer',
+        'username'=>'string',
+        'phone'=>'string',
+        'role'=>'boolean',
+        'photo'=>'string',
+        'code'=>'string',
     ];
+
+    //------------------------------------------------------
+
+    protected function getCodeAttribute()
+    {
+        return Crypt::decrypt($this->attributes['code']);
+    }
+
+    //-------------------------------------------------------
 
     public function favorites() : HasMany
     {
         return $this->hasMany(Favorite::class);
-    }
-
-    public function specialization() : BelongsTo
-    {
-        return $this->belongsTo(Specialization::class);
     }
 
     public function complaints() : HasMany

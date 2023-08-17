@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->unique();
             $table->unsignedBigInteger('specialization_id');
             $table->string('name');
             $table->foreign('specialization_id')->references('id')->on('specializations')->onDelete('cascade');

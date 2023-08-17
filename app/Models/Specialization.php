@@ -39,9 +39,9 @@ class Specialization extends Model
 
     ];
 
-    public function users() : HasMany
+    public function codes() : HasMany
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Code::class);
     }
 
     public function books() : HasMany

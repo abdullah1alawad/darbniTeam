@@ -3,32 +3,37 @@
 namespace App\Traits;
 
 use Illuminate\Http\Response;
+
 trait GeneralTrait
 {
-    public function apiResponse($data = null, $status = true, $error = null, $statusCode = 200) : Response
+    public function apiResponse($data = null, $status = true, $message = null, $statusCode = 200)
     {
         $array = [
             'data' => $data,
             'status' => $status,
-            'error' => $error,
-            'statusCode' => $statusCode
+            'message' => $message,
         ];
-        return response($array);
+        return response()->json($array,$statusCode);
     }
 
-    public function unAuthorisedResponse(): Response
+    public function unAuthorisedResponse()
     {
         return $this->apiResponse(null, false, 'Unauthorised !!', 401);
     }
 
-    public function notFoundMessage($more = null): Response
+    public function notFoundMessage($more = null)
     {
         return $this->apiResponse(null, true, $more . ' Not found in our database !', 404);
     }
 
-    public function requiredField($message): Response
+    public function requiredField($message)
     {
         return $this->apiResponse(null, false, $message, 200);
+    }
+
+    public function internalServer($message)
+    {
+        return $this->apiResponse(null, false, $message, 500);
     }
 
     public function apiValidation($request, $array): array
