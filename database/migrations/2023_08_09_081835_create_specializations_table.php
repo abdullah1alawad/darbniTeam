@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('uuid')->unique();
             $table->string('name');
+            $table->boolean('type');
+            $table->boolean('level');
             $table->string('photo');
             $table->timestamps();
         });

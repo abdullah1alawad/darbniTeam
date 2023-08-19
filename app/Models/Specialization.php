@@ -18,7 +18,7 @@ class Specialization extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'name', 'uuid', 'photo'
     ];
 
     /**
@@ -36,32 +36,21 @@ class Specialization extends Model
      * @var array<string, string>
      */
     protected $casts = [
-
+        'id' => 'integer',
+        'uuid' => 'string',
+        'name' => 'string',
+        'photo' => 'string',
     ];
 
-    public function codes() : HasMany
-    {
-        return $this->hasMany(Code::class);
-    }
 
-    public function books() : HasMany
-    {
-        return $this->hasMany(Book::class);
-    }
-
-    public function exams() : HasMany
+    public function exams(): HasMany
     {
         return $this->hasMany(Exam::class);
     }
 
-    public function subjects() : HasMany
+    public function subjects(): HasMany
     {
         return $this->hasMany(Subject::class);
-    }
-
-    public function image() : MorphOne
-    {
-        return $this->morphOne(Imageable::class,'imageable');
     }
 
 }

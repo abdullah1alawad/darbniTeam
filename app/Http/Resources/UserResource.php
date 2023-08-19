@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Specialization;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -14,10 +15,11 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $specialization_uuid=Specialization::find($this->specialization_id);
         return [
             'token'=>$this->token,
-            'uuid'=>$this->uuid,
-            'specialization_id'=>$this->specialization_id,
+            'user_uuid'=>$this->uuid,
+            'specialization_uuid'=>$specialization_uuid->uuid,
             'username'=>$this->username,
             'phone'=>$this->phone,
             'role'=>$this->role ? 'admin' : 'normal',

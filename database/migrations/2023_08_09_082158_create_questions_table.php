@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('uuid')->unique();
             $table->unsignedBigInteger('subject_id');
-            $table->morphs('questionable');
-            $table->string('question');
+            $table->text('question');
             $table->string('reference');
+            $table->boolean('is_book');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->timestamps();
         });
