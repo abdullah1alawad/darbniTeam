@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Specialization;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use App\traits\GeneralTrait;
@@ -27,12 +28,14 @@ class UpdateSpecializationRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
+     * @throws \Exception
      */
     public function rules()
     {
         $specialization = Specialization::where('uuid', $this->route('specialization_uuid'))->first();
-        if (!$specialization)
-            $this->notFoundMessage();
+        if (!$specialization) {
+            throw new \Exception("Specialization not found");
+        }
 
         return [
             'name' => ['required', 'regex:/^[\p{Arabic}a-zA-Z0-9\s.,!?-]*$/u', 'max:40',
@@ -50,4 +53,5 @@ class UpdateSpecializationRequest extends FormRequest
 
         throw new ValidationException($validator, $response);
     }
+
 }

@@ -20,16 +20,9 @@ class FavoriteResource extends JsonResource
     {
         $question = Question::find($this->question_id);
 
-        $answers = $question->question['answers']['wrong'];
-        $answers[] = $question->question['answers']['correct'];
-
         return [
             'favorite_uuid' => $this->uuid,
-            'question' => [
-                'question_uuid' => $question->uuid,
-                'answers' => Collection::wrap($answers)->shuffle()->all(),
-                'reference' => $question->reference
-            ],
+            'question' => QuestionResource::make($question),
         ];
     }
 }

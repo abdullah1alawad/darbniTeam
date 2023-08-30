@@ -176,6 +176,7 @@ class QuestionController extends Controller
         $mark = 0;
         $sum = 0;
         $correctAnswers = [];
+        $questions = [];
         $allQuestionsCounter = count($data);
 
         foreach ($data as $val) {
@@ -194,9 +195,11 @@ class QuestionController extends Controller
 
             if ($correct !== $val['answer_uuid']) {
                 $wrongCounter++;
+                $questions[]=QuestionResource::make($question);
                 $correctAnswers[] = [
                     'question_uuid' => $question->uuid,
                     'correctAnswerUuid' => $correct,
+                    'incorrectAnswerUuid' => $val['answer_uuid'],
                     'question_mark' => $question->mark,
                 ];
             } else
@@ -206,7 +209,8 @@ class QuestionController extends Controller
         $result = [
             'correct' => $allQuestionsCounter - $wrongCounter,
             'wrong' => $wrongCounter,
-            'answer' => $correctAnswers,
+            'questions'=>$questions,
+            'answers' => $correctAnswers,
             'student_mark' => $mark,
             'final_mark' => $sum,
         ];

@@ -13,7 +13,7 @@ class FavoriteController extends Controller
 {
     use GeneralTrait;
 
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
         try {
             $user_id = auth('sanctum')->user()->id;
@@ -52,6 +52,8 @@ class FavoriteController extends Controller
     {
         try {
             $question = Question::where('uuid', $question_uuid)->first();
+            if (!$question)
+                return $this->notFoundMessage('did not found this question.');
             $favorite = Favorite::where('question_id', $question->id)->first();
 
             if (!$favorite)
