@@ -16,6 +16,7 @@ class Slider extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid','content'
     ];
 
     /**
@@ -36,8 +37,4 @@ class Slider extends Model
 
     ];
 
-    public function image() : MorphOne
-    {
-        return $this->morphOne(Imageable::class,'imageable');
-    }
 }

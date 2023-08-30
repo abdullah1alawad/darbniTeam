@@ -19,7 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->text('question');
             $table->string('reference');
-            $table->boolean('is_book');
+            $table->float('mark');
+            $table->boolean('is_book')->nullable();
+            $table->date('date')->nullable();
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->timestamps();
         });

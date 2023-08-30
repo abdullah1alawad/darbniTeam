@@ -2,84 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewComplaintEvent;
+use App\Http\Requests\ComplaintRequest;
 use App\Models\Complaint;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\traits\GeneralTrait;
 
 class ComplaintController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    use GeneralTrait;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(ComplaintRequest $request)
     {
-        //
-    }
+        try {
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            if (!auth('sanctum')->user())
+                return $this->unAuthorisedResponse();
+            $user_id = auth('sanctum')->user()->id;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Complaint  $complaint
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Complaint $complaint)
-    {
-        //
-    }
+            $complaint = Complaint::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user_id,
+                'content' => $request->input('content'),
+            ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Complaint  $complaint
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Complaint $complaint)
-    {
-        //
-    }
+            event(new NewComplaintEvent($complaint));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Complaint  $complaint
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Complaint $complaint)
-    {
-        //
-    }
+            return $this->apiResponse(null, true, 'the complaint has been added successfully');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Complaint  $complaint
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Complaint $complaint)
-    {
-        //
+        } catch (\Exception $ex) {
+            return $this->internalServer($ex->getMessage());
+        }
+
+
     }
 }

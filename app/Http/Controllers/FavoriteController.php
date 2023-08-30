@@ -2,84 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FavoriteRequest;
+use App\Http\Resources\FavoriteResource;
 use App\Models\Favorite;
-use Illuminate\Http\Request;
+use App\Models\Question;
+use App\traits\GeneralTrait;
+use Illuminate\Support\Str;
 
 class FavoriteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use GeneralTrait;
+
     public function index()
     {
-        //
+        try {
+            $user_id = auth('sanctum')->user()->id;
+
+            $favorites = Favorite::where('user_id', $user_id)->get();
+            $favorites = FavoriteResource::collection($favorites);
+
+            return $this->apiResponse($favorites, true, 'all favorites questions.');
+
+        } catch (\Exception $ex) {
+            return $this->internalServer($ex->getMessage());
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function store(FavoriteRequest $request)
     {
-        //
+        try {
+            $user_id = auth('sanctum')->user()->id;
+            $question = Question::where('uuid', $request->question_uuid)->select('id')->first();
+
+            Favorite::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user_id,
+                'question_id' => $question->id,
+            ]);
+
+            return $this->apiResponse(null, true, 'the question has been added to the favorites');
+
+        } catch (\Exception $ex) {
+            return $this->internalServer($ex->getMessage());
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function destroy($question_uuid)
     {
-        //
-    }
+        try {
+            $question = Question::where('uuid', $question_uuid)->first();
+            $favorite = Favorite::where('question_id', $question->id)->first();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Favorite $favorite)
-    {
-        //
-    }
+            if (!$favorite)
+                return $this->notFoundMessage();
+            $favorite->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Favorite $favorite)
-    {
-        //
-    }
+            return $this->apiResponse(null, true, 'the question has been deleted from favorites');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Favorite $favorite)
-    {
-        //
-    }
+        } catch (\Exception $ex) {
+            return $this->internalServer($ex->getMessage());
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Favorite $favorite)
-    {
-        //
     }
 }

@@ -16,7 +16,7 @@ class Favorite extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id','question_id'
+        'user_id','question_id','uuid'
     ];
 
     /**

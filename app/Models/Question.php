@@ -18,8 +18,9 @@ class Question extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'subject_id',
-        'question','reference'
+        'subject_id','uuid',
+        'question','reference','mark',
+        'is_book','date'
     ];
 
     /**
@@ -37,7 +38,7 @@ class Question extends Model
      * @var array<string, string>
      */
     protected $casts = [
-
+        'question'=>'array',
     ];
 
     public function favorites() : HasMany
@@ -45,21 +46,9 @@ class Question extends Model
         return $this->HasMany(Favorite::class);
     }
 
-    public function answers() : HasMany
-    {
-        return $this->hasMany(Answer::class);
-    }
-
     public function subject() :BelongsTo
     {
         return $this->belongsTo(Subject::class);
     }
-
-    public function questionable() : MorphTo
-    {
-        return $this->morphTo();
-    }
-
-
 
 }

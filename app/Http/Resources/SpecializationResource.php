@@ -18,8 +18,7 @@ class SpecializationResource extends JsonResource
             'specialization_uuid'=>$this->uuid,
             'name'=>$this->name,
             'type'=>$this->type,
-            'level'=>$this->level,
-            'photo'=>$this->photo,
+            'photo'=>'https://darbnii.000webhostapp.com/'.$this->photo,
         ];
     }
 }

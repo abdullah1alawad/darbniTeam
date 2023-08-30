@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Traits;
+namespace App\traits;
 
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Psy\Util\Str;
 
 trait GeneralTrait
 {
@@ -13,7 +15,7 @@ trait GeneralTrait
             'status' => $status,
             'message' => $message,
         ];
-        return response()->json($array,$statusCode);
+        return response()->json($array, $statusCode);
     }
 
     public function unAuthorisedResponse()
@@ -46,24 +48,5 @@ trait GeneralTrait
         }
         return [true, 'No error'];
     }
-
-//    protected function successResponse($data, $message = null, $code = 200)
-//    {
-//        return response()->json([
-//            'status'=> 'Success',
-//            'message' => $message,
-//            'data' => $data
-//        ], $code);
-//    }
-//
-//    protected function errorResponse($message = null, $code)
-//    {
-//        return response()->json([
-//            'status'=>'Error',
-//            'message' => $message,
-//            'data' => null
-//        ], $code);
-//    }
-
 
 }

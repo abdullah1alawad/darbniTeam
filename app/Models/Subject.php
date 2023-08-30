@@ -18,7 +18,7 @@ class Subject extends Model
      */
     protected $fillable = [
         'specialization_id',
-        'name',
+        'name','level','uuid'
     ];
 
     /**
@@ -48,11 +48,5 @@ class Subject extends Model
     {
         return $this->belongsTo(Specialization::class);
     }
-
-    public function section() : BelongsTo
-    {
-        return $this->belongsTo(Section::class);
-    }
-
 
 }

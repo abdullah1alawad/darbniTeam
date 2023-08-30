@@ -18,7 +18,8 @@ class Specialization extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'uuid', 'photo'
+        'name', 'uuid', 'photo',
+        'type'
     ];
 
     /**
@@ -41,12 +42,6 @@ class Specialization extends Model
         'name' => 'string',
         'photo' => 'string',
     ];
-
-
-    public function exams(): HasMany
-    {
-        return $this->hasMany(Exam::class);
-    }
 
     public function subjects(): HasMany
     {

@@ -32,8 +32,8 @@ class LoginRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'username' => ['required', 'exists:users,username'],
-            'code' => ['required',new CodeCheck($request)]
+            'username' => ['required', 'exists:users,username','max:30'],
+            'code' => ['required',new CodeCheck($request),'max:20']
         ];
     }
 

@@ -2,84 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddSliderRequest;
+use App\Http\Resources\SliderResource;
 use App\Models\Slider;
-use Illuminate\Http\Request;
+use App\traits\GeneralTrait;
+use Illuminate\Support\Str;
 
 class SliderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use GeneralTrait;
+
     public function index()
     {
-        //
+        try {
+            $sliders = Slider::all();
+            $sliders = SliderResource::collection($sliders);
+
+            return $this->apiResponse($sliders, true, 'all sliders here.');
+
+        } catch (\Exception $ex) {
+            return $this->internalServer($ex->getMessage());
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(AddSliderRequest $request)
     {
-        //
-    }
+        Slider::create([
+            'uuid' => Str::uuid(),
+            'content' => $request->input('content'),
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Slider $slider)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Slider $slider)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Slider $slider)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Slider $slider)
-    {
-        //
+        return $this->apiResponse(null, true, 'the slider has been added successfully.');
     }
 }
